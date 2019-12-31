@@ -32,13 +32,9 @@ class PostsFragment: BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         postsViewModel = ViewModelProviders.of(this, viewModelFactory).get(IPostsViewModel::class.java)
-
+        postsViewModel.getPostListFromService()
         postsViewModel.getPosts().observe(this, Observer { posts ->
-            Log.d("POST_1", posts[0].title)
-        })
-
-        postsViewModel.getPost(1).observe(this, Observer { postItem ->
-            Log.d("POST_ITEM", postItem.title)
+            Log.d("POST_1", "${posts.size}")
         })
 
         button_close_posts.setOnClickListener { view ->
