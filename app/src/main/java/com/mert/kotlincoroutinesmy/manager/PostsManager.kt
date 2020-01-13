@@ -2,6 +2,7 @@ package com.mert.kotlincoroutinesmy.manager
 
 import androidx.lifecycle.MutableLiveData
 import com.mert.kotlincoroutinesmy.data.PostItem
+import com.mert.kotlincoroutinesmy.repository.post.PostRepository
 import javax.inject.Inject
 
 /**
@@ -9,12 +10,10 @@ import javax.inject.Inject
  */
 class PostsManager @Inject constructor() {
 
-    fun getPosts(): MutableLiveData<List<PostItem>> {
+    val postRepository by lazy { PostRepository() }
 
-        val postItem1 = PostItem(1,1, "title1", "body1")
-        val postItem2 = PostItem(2,2, "title2", "body2")
-
-        return MutableLiveData(listOf(postItem1, postItem2))
+    suspend fun getPosts(): MutableLiveData<List<PostItem>> {
+        return MutableLiveData(postRepository.getPosts())
     }
 
     fun getPost(id: Int): MutableLiveData<PostItem> {
