@@ -1,7 +1,6 @@
 package com.mert.kotlincoroutinesmy.repository.post
 
 import com.mert.kotlincoroutinesmy.data.PostItem
-import retrofit2.Call
 import retrofit2.http.GET
 
 //

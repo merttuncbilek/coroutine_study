@@ -1,6 +1,7 @@
 package com.mert.kotlincoroutinesmy.posts
 
 import androidx.lifecycle.ViewModelProvider
+import com.mert.kotlincoroutinesmy.dependencyinjection.NetworkModule
 import com.mert.kotlincoroutinesmy.repository.post.PostRepository
 import dagger.Binds
 import dagger.Module

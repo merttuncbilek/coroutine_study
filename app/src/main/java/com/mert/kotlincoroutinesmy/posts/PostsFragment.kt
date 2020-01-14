@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import com.mert.kotlincoroutinesmy.BaseFragment
 import com.mert.kotlincoroutinesmy.R
+import com.mert.kotlincoroutinesmy.data.PostItem
 import kotlinx.android.synthetic.main.fragment_posts.*
 import javax.inject.Inject
 
@@ -32,14 +33,17 @@ class PostsFragment: BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         postsViewModel = ViewModelProviders.of(this, viewModelFactory).get(IPostsViewModel::class.java)
-        postsViewModel.getPostListFromService()
-        postsViewModel.getPosts().observe(this, Observer { posts ->
-            Log.d("POST_1", "${posts.size}")
-        })
+        postsViewModel.posts.observe(this, postsObserver)
 
-        button_close_posts.setOnClickListener { view ->
+        button_close_posts.setOnClickListener { _ ->
             view.findNavController().popBackStack()
         }
+
+        postsViewModel.getPostListFromService()
+    }
+
+    private val postsObserver = Observer<List<PostItem>> { posts ->
+        Log.d("POST_1", "${posts.size}")
     }
 
 }

@@ -14,17 +14,22 @@ import kotlinx.coroutines.*
  * Created by Mert Tuncbilek on 2019-12-15.
  */
 abstract class IPostsViewModel(): ViewModel() {
-    abstract fun getPosts(): LiveData<List<PostItem>>
-    abstract fun getPost(id: Int): LiveData<PostItem>
+    abstract val posts: LiveData<List<PostItem>>
     abstract fun getPostListFromService()
 }
 class PostsViewModel @Inject constructor(val manager: PostsManager): IPostsViewModel() {
 
 
-     override fun getPostListFromService() {
+    private var _posts = MutableLiveData<List<PostItem>>()
+    override val posts: LiveData<List<PostItem>> by lazy {
+        return@lazy _posts
+    }
+
+    override fun getPostListFromService() {
         CoroutineScope(Dispatchers.IO).launch {
+            val data = manager.getPosts()
             withContext(Dispatchers.Main){
-                _postList.value = manager.getPosts().value
+                _posts.value = data.value
             }
         }
     }
@@ -32,13 +37,6 @@ class PostsViewModel @Inject constructor(val manager: PostsManager): IPostsViewM
         return@lazy MutableLiveData(listOf<PostItem>())
     }
 
-    private val _post: Map<Int, LiveData<PostItem>> = lazyMap {id ->
-        return@lazyMap manager.getPost(id)
-    }
-
-    override fun getPosts(): LiveData<List<PostItem>> = _postList
-
-    override fun getPost(id: Int): LiveData<PostItem> = _post.getValue(id)
 }
 
 private fun <K, V> lazyMap(function: (K) -> V): Map<K, V> {

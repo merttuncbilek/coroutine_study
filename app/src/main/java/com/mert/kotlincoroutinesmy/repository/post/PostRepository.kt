@@ -1,17 +1,11 @@
 package com.mert.kotlincoroutinesmy.repository.post
 
-import com.mert.kotlincoroutinesmy.dependencyinjection.RetrofitService
+import javax.inject.Inject
 
 //
 // Created by Ekrem Hatipoglu on 2019-12-31.
 // Copyright (c) 2019 Evrensel. All rights reserved.
 //
-
-class PostRepository {
-
-    val service by lazy {
-        RetrofitService.createService<IPostService>()
-    }
-
-    suspend fun getPosts() = service.getPosts()
+class PostRepository @Inject constructor(val postApi: IPostService) {
+    suspend fun getPosts() = postApi.getPosts()
 }
